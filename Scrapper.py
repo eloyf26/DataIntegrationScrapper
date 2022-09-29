@@ -8,7 +8,7 @@ def test():
 
         print("download not succesfull")
         exit
-    
+    print("hola")
     
     soup=BeautifulSoup(page.content,'html.parser')
     print(soup.prettify())
