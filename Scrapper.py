@@ -12,6 +12,5 @@ def test():
     
     soup=BeautifulSoup(page.content,'html.parser')
     print(soup.prettify())
-print("Paula")
 
 test()
