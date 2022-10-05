@@ -1,5 +1,6 @@
 from cgi import test
 from bs4 import BeautifulSoup
+#import pandas as pd
 import requests
 def test():
     #cArray = 
@@ -11,17 +12,23 @@ def test():
 
         print("download not succesfull")
         exit
-    print("hola julia")
     
-    soup=BeautifulSoup(page.content,'html.parser')
-    print(soup.prettify())
+    soup=BeautifulSoup(page.content,'lxml')
+    print (soup.prettify())
+    meme = soup.find_all("section", class_= "page__wrapper page__wrapper--grow page__wrapper--light")
+    print(meme)
+ 
+def GetMovieTheatersLink():
+    # Load the xlsx file
+    excel_data = pd.read_excel(r"C:\Users\eloyf\Downloads\Coordenadaslugaresculturale.xlsx")
+    print("checkpint 1")
+    # Read the values of the file in the dataframe
+    cines = pd.DataFrame(excel_data, columns=['Nombre','Link Name']).head(10)
+    # Print the content
+    
+    print(list(cines["Link Name"]))
+    return list(cines["Link Name"])
 
-    #print ("Aqui llego")
-    #gf = soup.find_all("movie_image")
-    #print ("Aqui llego")
-    #for i in gf:
-    #    print ("Aqui llego")
-    #    print(i)
 
 
 test()
