@@ -1,24 +1,13 @@
-from cgi import test
-from pickle import FALSE, TRUE
-from re import X
-from sre_compile import isstring
-from unicodedata import name
+from cgitb import html
+from operator import concat
 from bs4 import BeautifulSoup
 import requests
 import re
 import json
 
-def main():
-
-    domain = "https://www.tvguia.es/"
-    page = requests.get(domain)
-
-    if (page.status_code != 200):
-
-        print("download not succesfull")
-        exit
+def main( htmlSource ):
     
-    soup=BeautifulSoup(page.content,'html.parser')
+    soup=BeautifulSoup(htmlSource,'html.parser')
 
     #Find the div tag that contains all the channels
     channels = soup.find_all(id = re.compile('channel-*'))
@@ -31,29 +20,35 @@ def main():
         for tvProgram in programs:            
            
             # Find link with all info in the a tag for each of the tv programs
-            infoLink = tvProgram.attrs['href']
-            page = requests.get(domain + infoLink)
-            programSoup=BeautifulSoup(page.content,'html.parser')
-
-            programInfo = {'title':GetProgramTitle(programSoup), 'time':GetProgramTime(programSoup)}
+            #infoLink = tvProgram.attrs['href']
+            #page = requests.get(domain + infoLink)
+            #programSoup=BeautifulSoup(page.content,'html.parser')
+            programNameAndTime = GetProgramInfo(tvProgram)
+            programInfo = {'title':programNameAndTime[1], 'time':programNameAndTime[0]}
             workingChannel['programs'].append(programInfo)
 
         dayScheduleInfo.append(workingChannel)
-    jsonInfo = json.dumps(dayScheduleInfo)
+    jsonInfo = json.dumps(dayScheduleInfo,sort_keys=True, indent=4)
     print(jsonInfo)
+    return jsonInfo
 
 def GetChannelName( channel ):
     nameTag = channel.find('a')
     name = nameTag.attrs['alt']
     return name
 
-def GetProgramTitle ( program ):
-    title = (program.find("div", "title-details-television")).text.strip()
-    return title
-
+def GetProgramInfo ( program ):
+    try:
+        titleTag = program.text
+        temp = titleTag.strip().split()
+        titleAndTime = [temp[0]," ".join(temp[1:])]
+        return titleAndTime
+    except:
+        return [None,None]
 def GetProgramTime( program ):
-    time = (program.find("span", "date-details-television")).text
+    time = (program.find("span", "tv-hour")).text
     return time
-main()
 
-#/n Telediario 2
+
+html1 = requests.get("https://www.tvguia.es/")
+main(html1.content)
