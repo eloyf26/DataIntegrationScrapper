@@ -8,7 +8,6 @@ import requests
 import re
 import json
 
-from macpath import join
 def main():
 
     domain = "https://www.tvguia.es/"
@@ -49,11 +48,12 @@ def GetChannelName( channel ):
     return name
 
 def GetProgramTitle ( program ):
-    titleWithBlanks = (program.find("div", "title-details-television")).text
-    title = " ".join(titleWithBlanks.split())
+    title = (program.find("div", "title-details-television")).text.strip()
     return title
 
 def GetProgramTime( program ):
     time = (program.find("span", "date-details-television")).text
     return time
 main()
+
+#/n Telediario 2
