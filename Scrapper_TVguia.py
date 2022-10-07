@@ -11,26 +11,30 @@ def main( htmlSource ):
 
     #Find the div tag that contains all the channels
     channels = soup.find_all(id = re.compile('channel-*'))
+    if (len(channels)==0):
+        raise ValueError("No channels in this HTML code")
 
-    dayScheduleInfo = []
+    currentScheduleInfo = []
 
     for channel in channels:
+        #Loop through all channels
+
+        #workingChannel will be a dictionary with the name of the channel and a list of programs
         workingChannel = {'name':GetChannelName(channel),'programs':[]}
         programs = channel.find_all("a","a-details")
         for tvProgram in programs:            
-           
-            # Find link with all info in the a tag for each of the tv programs
-            #infoLink = tvProgram.attrs['href']
-            #page = requests.get(domain + infoLink)
-            #programSoup=BeautifulSoup(page.content,'html.parser')
+            #Loop through all programs
+
+            #Get the time and title 
             programNameAndTime = GetProgramInfo(tvProgram)
             programInfo = {'title':programNameAndTime[1], 'time':programNameAndTime[0]}
+
+            #Each program is a dictionary with title and time, and it will be appended to the programs list
             workingChannel['programs'].append(programInfo)
 
-        dayScheduleInfo.append(workingChannel)
-    jsonInfo = json.dumps(dayScheduleInfo,sort_keys=True, indent=4)
-    print(jsonInfo)
-    return jsonInfo
+        currentScheduleInfo.append(workingChannel)
+
+    return currentScheduleInfo
 
 def GetChannelName( channel ):
     nameTag = channel.find('a')
@@ -45,10 +49,3 @@ def GetProgramInfo ( program ):
         return titleAndTime
     except:
         return [None,None]
-def GetProgramTime( program ):
-    time = (program.find("span", "tv-hour")).text
-    return time
-
-
-html1 = requests.get("https://www.tvguia.es/")
-main(html1.content)
