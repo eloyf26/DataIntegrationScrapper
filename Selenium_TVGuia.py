@@ -1,9 +1,7 @@
 from gettext import find
-from lib2to3.pgen2 import driver
 from time import sleep
 from xml.etree.ElementPath import xpath_tokenizer
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 import re
 from Scrapper_TVguia import *
@@ -17,6 +15,7 @@ def main2():
 
     driver = webdriver.Chrome()
     driver.get("https://www.tvguia.es/") 
+    sleep(1)
     driver.find_element(By.ID, "c-p-bn").click()
     #print(driver.find_element(By.XPATH ,"//html")
 
@@ -71,5 +70,5 @@ def GetPageSource(driver):
     htmlcode = driver.find_element(By.TAG_NAME, "html")
     return htmlcode.get_attribute("innerHTML")
 
-with open('json_data.json', 'w') as outfile:
-   json.dump(main2(), outfile, sort_keys=True, indent=4)
+with open('json_data.json', 'w',encoding="utf-8") as outfile:
+   json.dump(main2(), outfile, sort_keys=True, indent=4, ensure_ascii=False)
