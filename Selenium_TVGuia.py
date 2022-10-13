@@ -33,7 +33,7 @@ def Selenium_bot():
     weeklyProgram.append(DayInfo2)
     weeklyProgram.append(DayInfo3)
     weeklyProgram.append(DayInfo4)
-    
+
     return weeklyProgram
    
 def GetDayInfo( thisDayId, driver ):
@@ -78,5 +78,3 @@ def GetTimePeriodInfo( thisTimeId , driver ):
 def GetPageSource(driver):
     htmlcode = driver.find_element(By.TAG_NAME, "html")
     return htmlcode.get_attribute("innerHTML")
-
-Selenium_bot()
