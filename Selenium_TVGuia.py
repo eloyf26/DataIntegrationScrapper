@@ -6,7 +6,9 @@ from selenium.webdriver.common.by import By
 import re
 from Scrapper_TVguia import *
 
-def main2():
+
+
+def Selenium_bot():
 
     idBeforeYesterday = 'button-before-yesterday'
     idYasterday = "button-yesterday"
@@ -19,18 +21,25 @@ def main2():
     driver.find_element(By.ID, "c-p-bn").click()
     #print(driver.find_element(By.XPATH ,"//html")
 
-    weeklyProgram = {"day1": "", "day2": "", "day3": "", "day4": ""}
+    #weeklyProgram = {"day1": "", "day2": "", "day3": "", "day4": ""}
+    weeklyProgram = []
 
-    weeklyProgram["day1"] = GetDayInfo (idBeforeYesterday, driver)
-    weeklyProgram["day2"] = GetDayInfo (idYasterday, driver)
-    weeklyProgram["day3"] = GetDayInfo (idToday, driver)
-    weeklyProgram["day4"] = GetDayInfo (idTomorrow, driver)
+    DayInfo1 = ["Day 1", GetDayInfo (idBeforeYesterday, driver)]
+    DayInfo2 = ["Day 2", GetDayInfo (idYasterday, driver)]
+    DayInfo3 = ["Day 3", GetDayInfo (idToday, driver)]
+    DayInfo4 = ["Day 4", GetDayInfo (idTomorrow, driver)]
 
+    weeklyProgram.append(DayInfo1) 
+    weeklyProgram.append(DayInfo2)
+    weeklyProgram.append(DayInfo3)
+    weeklyProgram.append(DayInfo4)
+    
     return weeklyProgram
    
 def GetDayInfo( thisDayId, driver ):
 
-    dayProgram = { "time1":"", "time2":"", "time3":"", "time4":"", "time5":"", "time6":"", "time7":"" }
+    #dayProgram = { "time1":"", "time2":"", "time3":"", "time4":"", "time5":"", "time6":"", "time7":"" }
+    dayProgram = []
 
     idTime1 = "button-00-03"
     idTime2 = "button-03-06"
@@ -45,14 +54,14 @@ def GetDayInfo( thisDayId, driver ):
     thisDay.click()
     
 
-    dayProgram["time1"] = GetTimePeriodInfo(idTime1, driver)
-    dayProgram["time2"] = GetTimePeriodInfo(idTime2, driver)
-    dayProgram["time3"] = GetTimePeriodInfo(idTime3, driver)
-    dayProgram["time4"] = GetTimePeriodInfo(idTime4, driver)
-    dayProgram["time5"] = GetTimePeriodInfo(idTime5, driver)
-    dayProgram["time6"] = GetTimePeriodInfo(idTime6, driver)
-    dayProgram["time7"] = GetTimePeriodInfo(idTime7, driver)
-    dayProgram["time8"] = GetTimePeriodInfo(idTime8, driver)
+    dayProgram.append(GetTimePeriodInfo(idTime1, driver)) 
+    dayProgram.append(GetTimePeriodInfo(idTime2, driver))
+    dayProgram.append(GetTimePeriodInfo(idTime3, driver))
+    dayProgram.append(GetTimePeriodInfo(idTime4, driver))
+    dayProgram.append(GetTimePeriodInfo(idTime5, driver))
+    dayProgram.append(GetTimePeriodInfo(idTime6, driver))
+    dayProgram.append(GetTimePeriodInfo(idTime7, driver))
+    dayProgram.append(GetTimePeriodInfo(idTime8, driver))
 
     return dayProgram
 
@@ -60,9 +69,9 @@ def GetTimePeriodInfo( thisTimeId , driver ):
     
     thisTime = driver.find_element(By.ID, thisTimeId)
     thisTime.click()
-    sleep(0.5)
+    sleep(1)
     htmlSource = GetPageSource(driver)
-    timePeriodInfo = main(htmlSource)
+    timePeriodInfo = GetTvguia(htmlSource)
 
     return timePeriodInfo
 
@@ -70,5 +79,4 @@ def GetPageSource(driver):
     htmlcode = driver.find_element(By.TAG_NAME, "html")
     return htmlcode.get_attribute("innerHTML")
 
-with open('json_data.json', 'w',encoding="utf-8") as outfile:
-   json.dump(main2(), outfile, sort_keys=True, indent=4, ensure_ascii=False)
+Selenium_bot()
