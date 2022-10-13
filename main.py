@@ -2,7 +2,7 @@ from movieIMDb import get_movies
 from weather import get_weather
 from cinemas import get_cinemas
 from twitter import get_tweets
-#from Selenium_TVGuia import Selenium_bot
+from Selenium_TVGuia import Selenium_bot
 import xlsxwriter
 
 
@@ -43,27 +43,35 @@ def Excel_Tvguia(TvGuiaInfo,workbook):
     W_Tvguia.write(0, 1, "timing") #Release date
     W_Tvguia.write(0, 2, "channel") #Rating
     W_Tvguia.write(0, 3, "program_name") #Duration
-
+    row = 1
     #extract Days 
-    for i in len(TvGuiaInfo):
-        extract_channels()
+    for a in TvGuiaInfo:
+        day = a[0]
+        # a=[day n , [    [  [ channel , [[program1, time] [program2, time] [program3, time] ... ]]    [] [] ...(121 channels) ]    []    []   ... (8 time periods)  ]     ]    
+        # each time period arrat
+        for b in a[1]:
+            #each channel in this time period
+            for c in b:
+                channel = c[0]
+                #each program array in this channel
+                for d in c[1]:
+                    program_name = d[0]
+                    program_time = d[1]
+                    W_Tvguia.write(row,0,day)
+                    W_Tvguia.write(row,1,program_time)
+                    W_Tvguia.write(row,2,channel)
+                    W_Tvguia.write(row,3,program_name)
+                    row += 1
     return
-
-def 
+ 
 workbook = xlsxwriter.Workbook('Database.xlsx')
 
-#W_TVGuia = workbook.add_worksheet("TVGuia")
-#TvGuiaInfo = Selenium_bot()
-#print(TvGuiaInfo)
-#print("\n")
+TvGuiaInfo = Selenium_bot()
+Excel_Tvguia(TvGuiaInfo,workbook)
 
 movies_url = "https://www.imdb.com/showtimes/location?ref_=sh_lc"
 movies = get_movies(movies_url)
 Excel_Movies(movies,workbook)
-#print(movies)
-#print("\n")
-
-
 
 #W_Cinemas = workbook.add_worksheet("Cinemas")
 #cinemas_url = "https://www.imdb.com/showtimes/"

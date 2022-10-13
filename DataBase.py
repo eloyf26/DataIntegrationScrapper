@@ -32,33 +32,27 @@ def DfToSql(list_of_dfs):
 
 	c.execute('CREATE TABLE IF NOT EXISTS museums (name text, image text, description text, address text, publiv_transport text, visit_hours text, price number)')
 	conn.commit()
-	list_of_dfs[1].to_sql('movies', conn, if_exists='replace', index = False)
+	list_of_dfs[1].to_sql('museums', conn, if_exists='replace', index = False)
 
 	c.execute('CREATE TABLE IF NOT EXISTS Tvguia (date text, timing text, channel text, program_name text)')
 	conn.commit()
-	list_of_dfs[0].to_sql('movies', conn, if_exists='replace', index = False)
+	list_of_dfs[0].to_sql('Tvguia', conn, if_exists='replace', index = False)
 
 	c.execute('CREATE TABLE IF NOT EXISTS twitter (filmus_name text, tweet text, urls text, likes number, rts number)')
 	conn.commit()
-	list_of_dfs[0].to_sql('movies', conn, if_exists='replace', index = False)
+	list_of_dfs[0].to_sql('twitter', conn, if_exists='replace', index = False)
 
 	c.execute('CREATE TABLE IF NOT EXISTS weather (location text, date text, hours text, max_min_temperature text, temperature number,image_url text, rain number)')
 	conn.commit()
-	list_of_dfs[0].to_sql('movies', conn, if_exists='replace', index = False)
+	list_of_dfs[0].to_sql('weather', conn, if_exists='replace', index = False)
 
 	c.execute('CREATE TABLE IF NOT EXISTS cinema (date text, cinema text, films text, time text)')
 	conn.commit()
-	list_of_dfs[0].to_sql('movies', conn, if_exists='replace', index = False)
+	list_of_dfs[0].to_sql('cinema', conn, if_exists='replace', index = False)
 
 	c.execute('CREATE TABLE IF NOT EXISTS cultural_places (place_name text, type text, latitude number, longitude number, location string, telephone_number number)')
 	conn.commit()
-	list_of_dfs[0].to_sql('movies', conn, if_exists='replace', index = False)
+	list_of_dfs[0].to_sql('cultural_places', conn, if_exists='replace', index = False)
 
-	c.execute('''  
-	SELECT * FROM movies
-			''')
-
-	for row in c.fetchall():
-		print (row)
 
 DfToSql(GetPandasDataFrame())
