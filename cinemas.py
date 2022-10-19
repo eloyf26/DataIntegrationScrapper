@@ -21,7 +21,7 @@ def to_24H (h, shift):
 # url = "https://www.imdb.com/showtimes/ES/28912/"		#Get main page url
 
 def get_cinemas (url):
-	id_file = open("Cines.txt","w")
+	# id_file = open("Cines.txt","w")
 	page = requests.get(url)
 	soup = BeautifulSoup(page.content, 'html.parser')
 

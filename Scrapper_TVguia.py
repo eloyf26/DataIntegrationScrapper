@@ -6,7 +6,7 @@ import requests
 import re
 import json
 
-def GetTvguia( htmlSource ):
+def GetTvguia( htmlSource, repeated_programs ):
     
     soup=BeautifulSoup(htmlSource,'html.parser')
 
@@ -22,6 +22,7 @@ def GetTvguia( htmlSource ):
 
         #workingChannel will be a dictionary with the name of the channel and a list of programs
         workingChannel = [GetChannelName(channel),[]]
+        chan_name = GetChannelName(channel)
         programs = channel.find_all("a","a-details")
         for tvProgram in programs:            
             #Loop through all programs
@@ -31,17 +32,19 @@ def GetTvguia( htmlSource ):
 
             #programinfo[0]= name , programInfo[1] = time
             programInfo = [programNameAndTime[1], programNameAndTime[0]]
-
+            prog = [chan_name, programNameAndTime[1], programNameAndTime[0]]
             #Make sure the data is valid before copying 
             if ((programNameAndTime[0] == None) or (programNameAndTime[1] == None)):
                 break
 
             #Each program is a dictionary with title and time, and it will be appended to the programs list
-            workingChannel[1].append(programInfo)
+            if prog not in repeated_programs:
+                workingChannel[1].append(programInfo)
+                repeated_programs.append(prog)
 
         currentScheduleInfo.append(workingChannel)
 
-    return currentScheduleInfo
+    return (currentScheduleInfo, repeated_programs)
 
 def GetChannelName( channel ):
     nameTag = channel.find('a')

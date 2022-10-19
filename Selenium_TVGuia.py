@@ -5,6 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import re
 from Scrapper_TVguia import *
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 
@@ -15,7 +16,7 @@ def Selenium_bot():
     idToday = "button-today"
     idTomorrow = "button-tomorrow"
 
-    driver = webdriver.Chrome()
+    driver = webdriver.Chrome(executable_path=ChromeDriverManager().install())
     driver.get("https://www.tvguia.es/") 
     sleep(1)
     driver.find_element(By.ID, "c-p-bn").click()
@@ -53,28 +54,47 @@ def GetDayInfo( thisDayId, driver ):
     thisDay = driver.find_element(By.ID, thisDayId)
     thisDay.click()
     
+    programs = []
 
-    dayProgram.append(GetTimePeriodInfo(idTime1, driver)) 
-    dayProgram.append(GetTimePeriodInfo(idTime2, driver))
-    dayProgram.append(GetTimePeriodInfo(idTime3, driver))
-    dayProgram.append(GetTimePeriodInfo(idTime4, driver))
-    dayProgram.append(GetTimePeriodInfo(idTime5, driver))
-    dayProgram.append(GetTimePeriodInfo(idTime6, driver))
-    dayProgram.append(GetTimePeriodInfo(idTime7, driver))
-    dayProgram.append(GetTimePeriodInfo(idTime8, driver))
+    (data, programs) = GetTimePeriodInfo(idTime1, driver, programs)
+    dayProgram.append(data)
+    # programs.append(program)
+    (data, program) = GetTimePeriodInfo(idTime2, driver, programs)
+    dayProgram.append(data)
+    # programs.append(program)
+    (data, programs) = GetTimePeriodInfo(idTime3, driver, programs)
+    dayProgram.append(data)
+    # programs.append(program)
+    (data, programs) = GetTimePeriodInfo(idTime4, driver, programs)
+    dayProgram.append(data)
+    # programs.append(program)
+    (data, programs) = GetTimePeriodInfo(idTime5, driver, programs)
+    dayProgram.append(data)
+    # programs.append(program)
+    (data, programs) = GetTimePeriodInfo(idTime6, driver, programs)
+    dayProgram.append(data)
+    # programs.append(program)
+    (data, programs) = GetTimePeriodInfo(idTime7, driver, programs)
+    dayProgram.append(data)
+    # programs.append(program)
+    (data, programs) = GetTimePeriodInfo(idTime8, driver, programs)
+    dayProgram.append(data)
+    # programs.append(program)
 
     return dayProgram
 
-def GetTimePeriodInfo( thisTimeId , driver ):
+def GetTimePeriodInfo( thisTimeId , driver, programs):
     
     thisTime = driver.find_element(By.ID, thisTimeId)
     thisTime.click()
     sleep(1)
     htmlSource = GetPageSource(driver)
-    timePeriodInfo = GetTvguia(htmlSource)
+    (timePeriodInfo, program) = GetTvguia(htmlSource, programs)
 
-    return timePeriodInfo
+    return (timePeriodInfo, program)
 
 def GetPageSource(driver):
     htmlcode = driver.find_element(By.TAG_NAME, "html")
     return htmlcode.get_attribute("innerHTML")
+
+# Selenium_bot()

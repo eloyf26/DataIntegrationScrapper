@@ -82,6 +82,9 @@ def get_tweets (names_arr):
             place_tweets.append(recap_tweets)
             all_tweets.append(place_tweets)
         except:
-            all_tweets.append("No recent tweets found")
+            single_tweet = [None, "No recent tweets found", None, None]
+            recap_tweets.append(single_tweet)
+            place_tweets.append(recap_tweets)
+            all_tweets.append(place_tweets)
 
     return all_tweets

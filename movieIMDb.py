@@ -133,7 +133,7 @@ def get_movies (url):
 
                 #Trailer
                 try:
-                    trailer = "https://www.imdb.com/" + movie_soup.find('a', class_ = 'ipc-lockup-overlay sc-f0d4a9ac-2 gkiDbj hero-media__slate-overlay ipc-focusable')['href']
+                    trailer = "https://www.imdb.com/" + movie_soup.find('a', class_ = 'ipc-lockup-overlay sc-e4a5af48-0 zjJJX ipc-focusable')['href']
                     movie_info.append(trailer)
                 except:
                     trailer = None
@@ -146,3 +146,6 @@ def get_movies (url):
         # print("---------------------------------------")
         # print(movies_info)
     return movies_info
+
+
+# print(get_movies("https://www.imdb.com/showtimes/location?ref_=sh_lc"))
