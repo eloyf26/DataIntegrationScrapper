@@ -82,7 +82,8 @@ def get_cinemas (url):
 					while len(schedule) > 0:
 						(h,shift) = to_24H (schedule[0].text.strip(), shift)
 						schedule = schedule[2:]
-						hours.append(h)
+						if h not in hours:
+							hours.append(h)
 
 					cinema_film_info.append(hours)
 

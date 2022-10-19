@@ -25,20 +25,20 @@ def deEmojify(text):
     return regrex_pattern.sub(r'', text)
 
 def get_tweets (names_arr):
-    # bearer_token = "AAAAAAAAAAAAAAAAAAAAAN%2FrhwEAAAAAxWzzpKXFRTdnfa0QD6DnMKRWheo%3DmLftaCklYzgSQK8UsoEokYli24jCTW2WstyJx05q9muJFyg3My"
-    # api_key = "cf8HBZgWozeKZSKNYm0Pw9RLU"
-    # api_secret = "0dYpmQwswBMQrGGD0FCNqqP2Vk94ixBMOYxfVMZy600DAm5EkT"
+    bearer_token = "AAAAAAAAAAAAAAAAAAAAAN%2FrhwEAAAAAxWzzpKXFRTdnfa0QD6DnMKRWheo%3DmLftaCklYzgSQK8UsoEokYli24jCTW2WstyJx05q9muJFyg3My"
+    api_key = "cf8HBZgWozeKZSKNYm0Pw9RLU"
+    api_secret = "0dYpmQwswBMQrGGD0FCNqqP2Vk94ixBMOYxfVMZy600DAm5EkT"
 
-    # access_token = "dataint123@gmail.com"
-    # access_token_secret = "DVtweet1234"
+    access_token = "dataint123@gmail.com"
+    access_token_secret = "DVtweet1234"
 
-    bearer_token = "AAAAAAAAAAAAAAAAAAAAALvViAEAAAAAeqD7f5TvaZYuGmy88c4cr6SEbZM%3DehLrsemoqRSc8EUQVCd6XFEZrYK2HFxgyoqDoZ75apLvPzjDU1"
+    # bearer_token = "AAAAAAAAAAAAAAAAAAAAALvViAEAAAAAeqD7f5TvaZYuGmy88c4cr6SEbZM%3DehLrsemoqRSc8EUQVCd6XFEZrYK2HFxgyoqDoZ75apLvPzjDU1"
 
-    api_key = "Rvbku5TcDaKznwWTrCTHGP1Np"
-    api_secret = "JciEJzigs15DvKMkbdNSGemml8vKY0ryD06tL2Hpd4pTYZUYmy"
+    # api_key = "Rvbku5TcDaKznwWTrCTHGP1Np"
+    # api_secret = "JciEJzigs15DvKMkbdNSGemml8vKY0ryD06tL2Hpd4pTYZUYmy"
 
-    access_token = "1577967285679132674-rimcs4oZlU1mYRT1nyL6r371PhHQlh"
-    access_token_secret = "X8FCG0UVMUtWZEJWz1vHyGnq9nR2qBdZhJxpzAYktr77a"
+    # access_token = "1577967285679132674-rimcs4oZlU1mYRT1nyL6r371PhHQlh"
+    # access_token_secret = "X8FCG0UVMUtWZEJWz1vHyGnq9nR2qBdZhJxpzAYktr77a"
 
     client = tweepy.Client(bearer_token)
 
@@ -62,25 +62,30 @@ def get_tweets (names_arr):
 
         tweets = response.data
 
+        film_tweets = []
         recap_tweets = []
         # Each Tweet object has default ID and text fields
         try:
             for tweet in tweets:
                 single_tweet = []
                 #print("-----------------------------------------------------------------------")
+
                 single_tweet.append(tweet.id)
                 single_tweet.append(deEmojify(tweet.text))
-                likes = tweet['public_metrics']['like_count']
-                single_tweet.append(likes)
-                retweets = tweet['public_metrics']['retweet_count']
-                single_tweet.append(retweets)
+                
+                if single_tweet not in film_tweets:
+                    film_tweets.append(single_tweet)
+                    likes = tweet['public_metrics']['like_count']
+                    single_tweet.append(likes)
+                    retweets = tweet['public_metrics']['retweet_count']
+                    single_tweet.append(retweets)
 
-                recap_tweets.append(single_tweet)
+                    recap_tweets.append(single_tweet)
 
             place_tweets.append(recap_tweets)
             all_tweets.append(place_tweets)
         except:
-            single_tweet = [None, "No recent tweets found", None, None]
+            single_tweet = [0, "No recent tweets found", None, None]
             recap_tweets.append(single_tweet)
             place_tweets.append(recap_tweets)
             all_tweets.append(place_tweets)
