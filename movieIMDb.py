@@ -1,8 +1,6 @@
 from bs4 import BeautifulSoup
 #from matplotlib.ticker import NullFormatter
 import requests
-import os
-import time
 
 #Aquí el link entra como una variable del loop
 # url = "https://www.imdb.com/showtimes/location?ref_=sh_lc"

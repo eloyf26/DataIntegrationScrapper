@@ -1,6 +1,4 @@
-import os
 import tweepy
-import numpy as np
 import re
 
 def deEmojify(text):

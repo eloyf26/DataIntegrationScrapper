@@ -1,7 +1,5 @@
-from movieIMDb import get_movies
 from weather import get_weather
 from cinemas import get_cinemas
-from twitter import get_tweets
 from museum import get_museums
 from Selenium_TVGuia import Selenium_bot
 from DataBase import GetPandasDataFrame
@@ -152,8 +150,8 @@ def Excel_Twitter(TwitterInfo,workbook):
     W_Twitter = workbook.add_worksheet("twitter")
     #Set initial columns
     W_Twitter.write(0, 0, "filmus_name")
-    W_Twitter.write(0, 1, "userID")
-    W_Twitter.write(0, 2, "tweer")
+    W_Twitter.write(0, 1, "user_id")
+    W_Twitter.write(0, 2, "tweet")
     W_Twitter.write(0, 3, "likes")
     W_Twitter.write(0, 4, "retweets")
     row = 1
@@ -201,11 +199,11 @@ def Excel_Cultural_Places(workbook):
 
 workbook = xlsxwriter.Workbook('Database.xlsx')
 
-print("Obtaining movies info.............")
-movies_url = "https://www.imdb.com/showtimes/location?ref_=sh_lc"
-movies = get_movies(movies_url)
-print("Creating movies Excel.............")
-Excel_Movies(movies,workbook)
+# print("Obtaining movies info.............")
+# movies_url = "https://www.imdb.com/showtimes/location?ref_=sh_lc"
+# movies = get_movies(movies_url)
+# print("Creating movies Excel.............")
+# Excel_Movies(movies,workbook)
 
 print("Obtaining museums info.............")
 museums_url = "https://es.hoteles.com/go/espana/mejores-museos-de-madrid"
@@ -218,15 +216,15 @@ TvGuiaInfo = Selenium_bot()
 print("Creating TVGuia Excel.............")
 Excel_Tvguia(TvGuiaInfo,workbook)
 
-print("Obtaining Twitter info...........")
-tweets_movies = get_tweets(movies)
-tweets_museums = get_tweets(museumsInfo)
-tweets = tweets_movies + tweets_museums
+# print("Obtaining Twitter info...........")
+# tweets_movies = get_tweets(movies)
+# tweets_museums = get_tweets(museumsInfo)
+# tweets = tweets_movies + tweets_museums
 
 #[['S', [[1581380547062136832, "@Ironica_ca @sendaabaetxo @MaxTena1 Si. Ir al cine. Quiero ir a ver smile, pero me han dicho que da un miedo que te", 0, 0], [1581380333127155712, '@HormigaXeneize Cada muerto que tuvimos como lateral, Sosa, Fuenzalida, Grana, Smile jara, Buffa etc\n \nNo era muy difícil', 0, 0], [1581380243834621952, '@Evil__Smile Yo quiero que sean novios. Son demasiado bellos los dos ', 0, 0], [1581379983393509376, '@soyeon_smile_ normal peque, es que es&gt;&gt;&gt;', 1, 0], [1581379643957219328, 'quien se viene a ver Smile conmigo ? ', 0, 0], [1581379286568615936, 'Alguien que quiera ir al cine a ver smile ', 0, 0], [1581378659520499713, 'Como que van a ir a ver Smile sin m Esperense a que salga da trabajaaaaaar', 0, 0], [1581378482290163712, 'Quiero ir al cine a ver smile', 2, 1], [1581378196662276096, '@shavafry ¿Es la de Smile? No Sean Toga', 0, 0], [1581377878968893440, '@Evil__Smile No veo a ningún viserys I hay solo al segundo mejor daemon de esa familia.', 0, 0]]], ['B', [[1581379373789499392, 'viendo bullet train x la trama ', 0, 0], [1581377209440563200, '@Perry_McQueen Te recomiendo enormemente Bullet Train, no es terror pero vas a tener morriña de ver Pulp Fiction después.', 0, 0], [1581370988935385088, '@KMubis @PliskeenDR Y fue por un acuerdo que incluyó Bullet Train.', 1, 0], [1581362241416617985, 'Ver Bad Bunny actuar en The Bullet Train son 15min de mi vida que jamás voy a recuperar 😭', 1, 0], [1581350958436847616, '@BytesNsound Bullet train desde dominos', 1, 0], [1581347332695916545, 'Joder la película de bullet train es increíble', 1, 0], [1581344796035100672, 'Bullet Train es una joyita', 1, 0], [1581337933998538754, '137. Bullet Train es tremendamente absurda y precisamente por eso me encanta. Estoy deseando verla otra vez. https://t.co/rtQnu2N1ae', 0, 0], [1581336582254080000, "Vista 'Bullet Train'.\n\nSeguiremos informando. https://t.co/XJoru4QW39 https://t.co/fr8mumIU87", 2, 0], [1581336379753054209, 'Bullet Train. Fantástica comedia negra de acción. Cada uno de sus carismáticos personajes a cual mejor. Hacía tiempo que no disfrutaba tanto de una película. Alocada, divertida y sin complejos. Gran puesta en escena. Me declaro fan absoluto de Limón. Para mí, notable. Un 8. https://t.co/iNvbba76Uk', 1, 0]]]]
 
-print("Creating Twitter Excel.............")
-Excel_Twitter(tweets, workbook)
+# print("Creating Twitter Excel.............")
+# Excel_Twitter(tweets, workbook)
 
 print("Obtaining weather info.............")
 weather_url = "https://www.aemet.es/es/eltiempo/prediccion/municipios?p=28&w=t"

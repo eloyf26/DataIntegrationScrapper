@@ -1,10 +1,5 @@
-from ast import Return
-from cgitb import html
-from operator import concat
 from bs4 import BeautifulSoup
-import requests
 import re
-import json
 
 def GetTvguia( htmlSource, repeated_programs ):
     

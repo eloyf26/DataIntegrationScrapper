@@ -1,11 +1,7 @@
-from gettext import find
 from time import sleep
-from xml.etree.ElementPath import xpath_tokenizer
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-import re
 from Scrapper_TVguia import *
-from webdriver_manager.chrome import ChromeDriverManager
 
 
 
@@ -16,7 +12,7 @@ def Selenium_bot():
     idToday = "button-today"
     idTomorrow = "button-tomorrow"
 
-    driver = webdriver.Chrome(executable_path=ChromeDriverManager().install())
+    driver = webdriver.Chrome()
     driver.get("https://www.tvguia.es/") 
     sleep(1)
     driver.find_element(By.ID, "c-p-bn").click()
