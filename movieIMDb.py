@@ -11,123 +11,138 @@ def get_movies (url):
     page = requests.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
 
-    movie_urls1 = soup.find_all('div', class_ = 'lister-item-image ribbonize')
+    dates = soup.find('div', class_ = 'datepicker').find_all('a', href=True)        # Obtain the links for all days in the web
 
     movies_info = []
-    for movie1 in movie_urls1:
-        movie_info = []
-        murl1 = "https://www.imdb.com" + movie1.a['href']
-        page = requests.get(murl1)
+    checking_movies = []
+
+    for date in dates:
+
+        d = date['href']
+        url = f'https://www.imdb.com{d}'
+        page = requests.get(url)
         soup = BeautifulSoup(page.content, 'html.parser')
 
-        movie = "https://www.imdb.com" + soup.find('td', class_ = 'overview-top').h4.a['href']
-        # print(movie)
+        movie_urls1 = soup.find_all('div', class_ = 'lister-item-image ribbonize')
 
-        html_movie = requests.get(movie)
-        movie_soup = BeautifulSoup(html_movie.content, 'html.parser')
+        for movie1 in movie_urls1:
 
-        #Movie Title
-        try:
-            title = movie_soup.find('h1').text.strip()
-            print(title)
-            movie_info.append(title)
-        except:
-            title = None
-            movie_info.append(title)
-                
-        data_tech = movie_soup.find_all('a', class_ = 'ipc-link ipc-link--baseAlt ipc-link--inherit-color sc-8c396aa2-1 WIUyh')
+            try_name = movie1.find('div', class_ = 'title').text.strip()
+            if try_name not in checking_movies:
 
-        #Movie Release Date
-        try:
-            release_date = data_tech[0].text
-            movie_info.append(release_date)
-        except:
-            release_date = None
-            movie_info.append(release_date)
+                checking_movies.append(try_name)
 
-        #Movie Rating
-        try:
-            rating = data_tech[1].text
-            movie_info.append(rating)
-        except:
-            rating = None
-            movie_info.append(rating)
+                movie_info = []
+                murl1 = "https://www.imdb.com" + movie1.a['href']
+                page = requests.get(murl1)
+                soup = BeautifulSoup(page.content, 'html.parser')
 
-        #Movie duration
-        try:
-            duration = movie_soup.find('ul', class_ = 'ipc-inline-list ipc-inline-list--show-dividers sc-8c396aa2-0 kqWovI baseAlt').find_all('li')[2].text.strip()
-            movie_info.append(duration)
-        except:
-            duration = None
-            movie_info.append(duration)
+                movie = "https://www.imdb.com" + soup.find('td', class_ = 'overview-top').h4.a['href']
+                # print(movie)
 
-        #Movie Poster
-        try:
-            poster = movie_soup.find('img', class_ = 'ipc-image')['src']
-            movie_info.append(poster)
-        except:
-            poster = None
-            movie_info.append(poster)
+                html_movie = requests.get(movie)
+                movie_soup = BeautifulSoup(html_movie.content, 'html.parser')
 
-        #Movie genre
-        try:
-            genre = movie_soup.find('span', class_ = 'ipc-chip__text').text.strip()
-            movie_info.append(genre)
-        except:
-            genre = None
-            movie_info.append(genre)
+                #Movie Title
+                try:
+                    title = movie_soup.find('h1').text.strip()
+                    #print(title)
+                    movie_info.append(title)
+                except:
+                    title = None
+                    movie_info.append(title)
+                        
+                data_tech = movie_soup.find_all('a', class_ = 'ipc-link ipc-link--baseAlt ipc-link--inherit-color sc-8c396aa2-1 WIUyh')
 
-        #Movie summary
-        try:
-            summary = movie_soup.find('span', class_= 'sc-16ede01-1 kgphFu').text
-            movie_info.append(summary)
-        except:
-            summary = None
-            movie_info.append(summary)
+                #Movie Release Date
+                try:
+                    release_date = data_tech[0].text
+                    movie_info.append(release_date)
+                except:
+                    release_date = None
+                    movie_info.append(release_date)
 
-        #Movie Score
-        try:
-            score = movie_soup.find('span', class_ = 'sc-7ab21ed2-1 jGRxWM').text
-            movie_info.append(score)
-        except:
-            score = None
-            movie_info.append(score)
+                #Movie Rating
+                try:
+                    rating = data_tech[1].text
+                    movie_info.append(rating)
+                except:
+                    rating = None
+                    movie_info.append(rating)
 
-        #Movie Director
-        try:
-            director = movie_soup.find('a', class_ = 'ipc-metadata-list-item__list-content-item ipc-metadata-list-item__list-content-item--link').text.strip()
-            movie_info.append(director)
-        except:
-            director = None
-            movie_info.append(director)
+                #Movie duration
+                try:
+                    duration = movie_soup.find('ul', class_ = 'ipc-inline-list ipc-inline-list--show-dividers sc-8c396aa2-0 kqWovI baseAlt').find_all('li')[2].text.strip()
+                    movie_info.append(duration)
+                except:
+                    duration = None
+                    movie_info.append(duration)
 
-        #Cast
-        try:
-            ct = movie_soup.find_all('ul', class_ = 'ipc-inline-list ipc-inline-list--show-dividers ipc-inline-list--inline ipc-metadata-list-item__list-content baseAlt', role = 'presentation')[2]
+                #Movie Poster
+                try:
+                    poster = movie_soup.find('img', class_ = 'ipc-image')['src']
+                    movie_info.append(poster)
+                except:
+                    poster = None
+                    movie_info.append(poster)
 
-            cast = []
-            for act in ct.find_all('a', href = True):
-                cast.append(act.text)
+                #Movie genre
+                try:
+                    genre = movie_soup.find('span', class_ = 'ipc-chip__text').text.strip()
+                    movie_info.append(genre)
+                except:
+                    genre = None
+                    movie_info.append(genre)
 
-            movie_info.append(cast)
-        except:
-            cast = None
-            movie_info.append(cast)
+                #Movie summary
+                try:
+                    summary = movie_soup.find('span', class_= 'sc-16ede01-1 kgphFu').text
+                    movie_info.append(summary)
+                except:
+                    summary = None
+                    movie_info.append(summary)
 
-        #Trailer
-        try:
-            trailer = "https://www.imdb.com/" + movie_soup.find('a', class_ = 'ipc-lockup-overlay sc-f0d4a9ac-2 gkiDbj hero-media__slate-overlay ipc-focusable')['href']
-            movie_info.append(trailer)
-        except:
-            trailer = None
-            movie_info.append(trailer)
+                #Movie Score
+                try:
+                    score = movie_soup.find('span', class_ = 'sc-7ab21ed2-1 jGRxWM').text
+                    movie_info.append(score)
+                except:
+                    score = None
+                    movie_info.append(score)
+
+                #Movie Director
+                try:
+                    director = movie_soup.find('a', class_ = 'ipc-metadata-list-item__list-content-item ipc-metadata-list-item__list-content-item--link').text.strip()
+                    movie_info.append(director)
+                except:
+                    director = None
+                    movie_info.append(director)
+
+                #Cast
+                try:
+                    ct = movie_soup.find_all('ul', class_ = 'ipc-inline-list ipc-inline-list--show-dividers ipc-inline-list--inline ipc-metadata-list-item__list-content baseAlt', role = 'presentation')[2]
+
+                    cast = []
+                    for act in ct.find_all('a', href = True):
+                        cast.append(act.text)
+
+                    movie_info.append(cast)
+                except:
+                    cast = None
+                    movie_info.append(cast)
+
+                #Trailer
+                try:
+                    trailer = "https://www.imdb.com/" + movie_soup.find('a', class_ = 'ipc-lockup-overlay sc-f0d4a9ac-2 gkiDbj hero-media__slate-overlay ipc-focusable')['href']
+                    movie_info.append(trailer)
+                except:
+                    trailer = None
+                    movie_info.append(trailer)
 
 
-        # print(movie_info)
-        movies_info.append(movie_info)
+                # print(movie_info)
+                movies_info.append(movie_info)
 
-    # print("---------------------------------------")
-    # print(movies_info)
+        # print("---------------------------------------")
+        # print(movies_info)
     return movies_info
-
-

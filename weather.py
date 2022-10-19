@@ -53,6 +53,8 @@ def get_weather (url):
             hours = soup.find_all('th', class_ = 'borde_izq_dcha_estado_cielo no_wrap')
             rain = soup.find_all('td', class_ = 'nocomunes')
                 
+            info_array = []
+
             for j in range (4):
                 hours_info = []
 
@@ -90,6 +92,7 @@ def get_weather (url):
                     # print(r)
                     hours_info.append(r)
 
-                location_info.append(hours_info)
+                info_array.append(hours_info)
+            location_info.append(info_array)
             all_info.append(location_info)
     return all_info

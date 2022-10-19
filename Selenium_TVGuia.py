@@ -33,7 +33,7 @@ def Selenium_bot():
     weeklyProgram.append(DayInfo2)
     weeklyProgram.append(DayInfo3)
     weeklyProgram.append(DayInfo4)
-
+    
     return weeklyProgram
    
 def GetDayInfo( thisDayId, driver ):

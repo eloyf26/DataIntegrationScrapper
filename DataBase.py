@@ -23,14 +23,14 @@ def GetPandasDataFrame():
 	return list_of_dfs
 
 def DfToSql(list_of_dfs):
-	conn = sqlite3.connect('test.db')
+	conn = sqlite3.connect('test2.db')
 	c = conn.cursor()
 
 	c.execute('CREATE TABLE IF NOT EXISTS movies (title text, release_date number, rating number, duration text, poster string, genre strin, summary string, score string, director string, cast string, trailer string)')
 	conn.commit()
 	list_of_dfs[0].to_sql('movies', conn, if_exists='replace', index = False)
 
-	c.execute('CREATE TABLE IF NOT EXISTS museums (name text, image text, description text, address text, publiv_transport text, visit_hours text, price number)')
+	c.execute('CREATE TABLE IF NOT EXISTS museums (name text, image text, description text, address text, public_transport text, visit_hours text, price number)')
 	conn.commit()
 	list_of_dfs[1].to_sql('museums', conn, if_exists='replace', index = False)
 
@@ -42,7 +42,7 @@ def DfToSql(list_of_dfs):
 	conn.commit()
 	list_of_dfs[0].to_sql('twitter', conn, if_exists='replace', index = False)
 
-	c.execute('CREATE TABLE IF NOT EXISTS weather (location text, date text, hours text, max_min_temperature text, temperature number,image_url text, rain number)')
+	c.execute('CREATE TABLE IF NOT EXISTS weather (location text, date text, max_min_temperature text, hours text, temperature number,image_url text, rain number)')
 	conn.commit()
 	list_of_dfs[0].to_sql('weather', conn, if_exists='replace', index = False)
 

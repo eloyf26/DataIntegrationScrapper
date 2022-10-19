@@ -2,85 +2,90 @@ from bs4 import BeautifulSoup
 import requests
 import os
 import time
+import re
 
-#url = 'https://museomadrid.com/museo-thyssen/'
+def get_museums(url):
 
-
-def museumInfo(url):
-
-    museum_info = []
+    all_info = []
 
     page = requests.get(url)
-    museum = BeautifulSoup(page.content, 'html.parser')
+    museums = BeautifulSoup(page.content, 'html.parser')
 
-    #Museum name
-    try:
-        name = museum.find('h1').text.strip()
-        museum_info.append(name)
-    except:
-        name = None
-        museum_info.append(name)
+    all_museums = museums.find_all('div', class_ = 'listicle-item')
 
-    #Museum image
-    try:
-        image = museum.find('div', class_ = 'post-thumbnail').find('img')['src']
-        museum_info.append(image)
-    except:
-        image = None
-        museum_info.append(image)
+    for mus in all_museums:
 
-    info = description = museum.find('div', class_ = 'entry-content').find_all('p')
-    #print(info)
-    #Museum description
-    try:
-        description = info[0].text.strip()
-        museum_info.append(description)
-    except:
-        description = None
-        museum_info.append(description)
+        museum_info = []
 
-    #Museum address
-    try:
-        address = info[1].text.split()[1:]
-        address = " ".join(address)
-        museum_info.append(address)
-    except:
-        address = None
-        museum_info.append(address)
+        #Museum name
+        try:
+            name = mus.find('h2').text.strip()
+            museum_info.append(name)
+        except:
+            name = None
+            museum_info.append(name)
 
-    #How to get there
-    try:
-        transport = info[2].text.split()[2:]
-        transport = " ".join(transport)
-        museum_info.append(transport)
-    except:
-        transport = None
-        museum_info.append(transport)
+        #Interesting fact
+        try:
+            interest = mus.find('h3').text.strip()
+            museum_info.append(interest)
+        except:
+            interest = None
+            museum_info.append(interest)
 
-    #Contact information
-    try:
-        contact = info[3].text.split()
-        contact = " ".join(contact)
-        museum_info.append(contact)
-    except:
-        contact = None
-        museum_info.append(contact)
+        #Museum image
+        try:
+            img = mus.find('img')['data-lazy-src']
+            museum_info.append(img)
+        except:
+            img = None
+            museum_info.append(img)
 
-    #Visit hours
-    try:
-        hours = info[4].text.strip()
-        museum_info.append(hours)
-    except:
-        hours = None
-        museum_info.append(hours)
+        #Museum category
+        try:
+            category = mus.find('ul').text.strip()
+            museum_info.append(category)
+        except:
+            category = None
+            museum_info.append(category)
 
-    #Ticket prices
-    try:
-        ticket = info[5].text.strip()
-        museum_info.append(ticket)
-    except:
-        ticket = None
-        museum_info.append(ticket)
+        #Museum description
+        try:
+            description = mus.find('div', class_ = 'description-wrap').text.strip()
+            museum_info.append(description)
+        except:
+            description = None
+            museum_info.append(description)
 
-    return museum_info
+        additional = mus.find('div', class_ = 'info-bullet-wrap').find_all('p')
+        
+        #Museum address
+        try:
+            street = additional[0].text.strip()
+            street = re.sub("Dirección: ","",street)
+            museum_info.append(street)
+        except:
+            street = None
+            museum_info.append(street)
 
+        #Visiting hours
+        try:
+            visit_h = additional[1].text.strip()
+            visit_h = re.sub("Horario: ","",visit_h)
+            museum_info.append(visit_h)
+        except:
+            visit_h = None
+            museum_info.append(visit_h)
+
+        #Museum telephone number
+        try:
+            telephone = additional[2].text.strip()
+            telephone = re.sub("Teléfono: ","",telephone)
+            museum_info.append(telephone)
+        except:
+            telephone = None
+            museum_info.append(telephone)
+
+        all_info.append(museum_info)
+
+    return all_info
